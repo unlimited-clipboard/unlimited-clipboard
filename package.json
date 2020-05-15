@@ -1,0 +1,30 @@
+{
+  "name": "unlimited-clipboard",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "rebuild": "electron-rebuild"
+  },
+  "repository": "https://github.com/morozovsk/unlimited-clipboard",
+  "keywords": [
+    "unlimited",
+    "quick",
+    "electron",
+    "prototype",
+    "demo"
+  ],
+  "author": "morozovsk",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^8.2.5",
+    "electron-builder": "^22.6.0",
+    "electron-rebuild": "^1.8.5"
+  },
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "dexie": "^3.0.0"
+  }
+}

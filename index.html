@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="node_modules/jquery/dist/jquery.js">
+    <link rel="stylesheet" href="main.css">
+    <title>history</title>
+  </head>
+  <body>
+  <form>
+    <input placeholder="Type something" class="form-control" autofocus/>
+  </form>
+  <table class="table">
+  </table>
+    <!-- You can also require other files to run in this process -->
+    <script src="./renderer.js"></script>
+  </body>
+</html>
