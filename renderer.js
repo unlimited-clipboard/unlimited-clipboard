@@ -9,7 +9,7 @@ const table = document.querySelector('table');
 
 document.body.addEventListener('keyup', refreshView);
 
-table.addEventListener('click', async function (e) {
+table.addEventListener('click', async (e) => {
     if (e.target.id) {
         if (clipboard.readText() === (await db.history.get(parseInt(e.target.id))).text) {
             return;
@@ -32,15 +32,16 @@ table.addEventListener('click', async function (e) {
 });
 
 function refreshView() {
+    db.history.count((r) => document.querySelector('title').innerText = `history (${r})`);
     return db.history.limit(10).desc()
-        .filter(function (history) {
+        .filter((history) => {
             return !input.value || history.text.indexOf(input.value) !== -1;
         })
         .toArray()
-        .then(function renderHistory(history) {
+        .then((history) => {
             table.innerHTML = '';
             let tabindex = 0;
-            history.forEach(function (row) {
+            history.forEach((row) => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `<tr><td id="${row.id}"=tabindex="${++tabindex}"> </td><td><button id="${row.id}">x</button></td></tr>`;
                 //console.log(tr.querySelector('td'));
@@ -49,15 +50,6 @@ function refreshView() {
             });
         });
 }
-
-/*db.history.add({text: "qweqwe"}).then(() => db.history.add({text: "qweqwe"})).then(() => db.history.toArray())
-    .then(function (copied) {
-        //alert ("My young friends: " + JSON.stringify(copied));
-        console.log("My young friends: " + JSON.stringify(copied))
-    }).catch(function (e) {
-    //alert ("Error: " + (e.stack || e));
-    console.log("Error: " + (e.stack || e))
-});*/
 
 const {ipcRenderer} = require('electron')
 //console.log(ipcRenderer.send('asynchronous-message', 'ping')) // prints "pong"
@@ -71,8 +63,6 @@ ipcRenderer.send('asynchronous-message', 'ping')*/
 
 setTimeout(async () => {
     await db.version(1).stores({history: "++id,text"});
-
-    db.history.count((r) => document.querySelector('title').innerText = `history (${r})`);
 
     refreshView();
 

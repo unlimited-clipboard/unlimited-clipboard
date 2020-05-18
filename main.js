@@ -6,7 +6,7 @@ if (!app.requestSingleInstanceLock()) {
     app.quit()
 }
 
-function createWindow() {
+function start() {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
         width: 450,
@@ -16,7 +16,7 @@ function createWindow() {
         //minimizable: false,
         //maximizable: false,
         //closable: true,
-        show: true,
+        show: false,
         title: 'qwe',
         //icon: path.join(__dirname, 'icons/16x16.png'),
         webPreferences: {
@@ -37,12 +37,12 @@ function createWindow() {
         darwin: 'icons/16x16.png'
     }
 
-    mainWindow.on('minimize', function (event) {
+    mainWindow.on('minimize', (event) => {
         event.preventDefault();
         mainWindow.hide();
     });
 
-    mainWindow.on('close', function (event) {
+    mainWindow.on('close', (event) => {
         if (!app.isQuiting) {
             event.preventDefault();
             mainWindow.hide();
@@ -56,83 +56,64 @@ function createWindow() {
 
     const template = [
         {
-            label: 'Show history', click: function () {
-                mainWindow.show();
-            }
+            label: 'Show history',
+            click: () => mainWindow.show()
         },
         /*{
-            label: 'Quit', click: function () {
-                app.isQuiting = true;
-                app.quit();
-            }
-        }*/
-    ]
-
-    /*template.push({
-      label: 'Clear clipboard history',
-      click: dialogClearHistory
-    })*/
-
-    template.push({
-        type: 'separator'
-    })
-
-    /*template.push({
-        label: 'About',
-        click: () => {
-            win.show()
-        }
-    })*/
-
-    /*template.push({
-        label: 'emty buffer',
-        click: () => {
-            clipboard.writeText('')
+            label: 'Switch keyboard',
+            click: switchKeyboard
+        },*/
+        {
+            type: 'separator'
         },
-        type: 'radio',
-        checked: true
-    })*/
-
-    template.push({
-        label: 'Exit',
-        click: () => {
-            app.exit()
+        {
+            label: 'Exit',
+            click: () => app.exit()
         }
-    })
+    ]
 
     let contextMenu = Menu.buildFromTemplate(template)
     tray.setContextMenu(contextMenu)
 
-    globalShortcut.register('CmdOrCtrl+Shift+Y', () => {
+    globalShortcut.register('CmdOrCtrl+Alt+Up', () => {
         tray.focus()
         mainWindow.show();
     })
 
+    //globalShortcut.register('CmdOrCtrl+Alt+Left', () => switchKeyboard)
+
     //setTimeout(() => mainWindow.send('asynchronous-message', clipboard.readText()), 1000)
+}
+
+function switchKeyboard() {
+    let selection = clipboard.readText('selection');
+    console.log(selection);
+
+    clipboard.writeText('111', 'selection');
+
+    selection = clipboard.readText('selection');
+    console.log(selection);
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(createWindow)
+app.whenReady().then(start)
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function () {
+app.on('window-all-closed', () => {
     // On macOS it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') app.quit()
 })
 
-app.on('activate', function () {
+app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    if (BrowserWindow.getAllWindows().length === 0) start()
 })
 
 /*ipcMain.on('asynchronous-message', (event, arg) => {
     console.log(arg) // prints "ping"
     setTimeout(() => event.reply('asynchronous-message', clipboard.readText()), 1000)
 })*/
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
