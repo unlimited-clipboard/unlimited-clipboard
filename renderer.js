@@ -1,5 +1,6 @@
 const {clipboard} = require('electron')
 
+const jquery = require('jquery');
 const dexie = require('dexie')
 dexie.debug = true;
 const db = new dexie("history");
@@ -7,9 +8,33 @@ const db = new dexie("history");
 const input = document.querySelector('input');
 const table = document.querySelector('table');
 
-document.body.addEventListener('keyup', refreshView);
+document.body.addEventListener('keydown', function(e) {
+    let focusable = Array.from(document.querySelectorAll("tr td:first-child"));
 
-table.addEventListener('click', async (e) => {
+    let index = focusable.indexOf(document.activeElement);
+
+    //focusable.push(input);
+
+    if (e.key === 'ArrowDown') {
+
+        let nextElement = focusable[index + 1] || focusable[0];
+        //console.log(nextElement);
+        nextElement.focus();
+
+    } else if (e.key === 'ArrowUp') {
+        let nextElement = focusable[index - 1] || focusable[focusable.length - 1];
+        //console.log(nextElement);
+        nextElement.focus();
+    } else if (e.key === 'Enter') {
+        changeToSelected(e)
+    } else {
+        refreshView();
+    }
+});
+
+table.addEventListener('click', changeToSelected);
+
+async function changeToSelected(e) {
     if (e.target.id) {
         if (clipboard.readText() === (await db.history.get(parseInt(e.target.id))).text) {
             return;
@@ -29,7 +54,7 @@ table.addEventListener('click', async (e) => {
 
     //console.log(e.target.id)
     //console.log(e.target.tagName)
-});
+}
 
 function refreshView() {
     db.history.count((r) => document.querySelector('title').innerText = `history (${r})`);
@@ -43,7 +68,8 @@ function refreshView() {
             let tabindex = 0;
             history.forEach((row) => {
                 const tr = document.createElement('tr');
-                tr.innerHTML = `<tr><td id="${row.id}"=tabindex="${++tabindex}"> </td><td><button id="${row.id}">x</button></td></tr>`;
+                tabindex++
+                tr.innerHTML = `<tr><td tabindex="${tabindex}" id="${row.id}"> </td><td><button id="${row.id}">&#10006;</button></td></tr>`;
                 //console.log(tr.querySelector('td'));
                 tr.querySelector('td').innerText = row.text.replace(/\n/g, ' ');
                 table.appendChild(tr);
@@ -80,6 +106,17 @@ setTimeout(async () => {
         if (previousText !== clipboard.readText()) {
             previousText = clipboard.readText();
             //console.log('newText:' + previousText)
+            db.history.limit(10000).desc()
+                .filter((history) => {
+                    return history.text === previousText;
+                })
+                .toArray()
+                .then((history) => {
+                    history.forEach((row) => {
+                        console.log(row.id);
+                        db.history.delete(row.id);
+                    });
+                });
             db.history.add({text: previousText}).then(refreshView);
         }
     }, 100)

@@ -17,13 +17,15 @@ function start() {
         //maximizable: false,
         //closable: true,
         show: false,
-        title: 'qwe',
+        title: 'clips',
         //icon: path.join(__dirname, 'icons/16x16.png'),
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true
         }
     })
+
+    mainWindow.setMenuBarVisibility(false)
 
     // and load the index.html of the app.
     mainWindow.loadFile('index.html')
@@ -43,6 +45,7 @@ function start() {
     });
 
     mainWindow.on('close', (event) => {
+        mainWindow.reload();
         if (!app.isQuiting) {
             event.preventDefault();
             mainWindow.hide();

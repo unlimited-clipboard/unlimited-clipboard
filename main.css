@@ -1,2 +1,2 @@
-body {width: 100%}
+body {width: 100%; overflow-y: hidden;}
 td {max-width: 350px; height: 1.2em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}

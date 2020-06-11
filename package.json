@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "bootstrap": "^4.4.1",
-    "dexie": "^3.0.0"
+    "dexie": "^3.0.0",
+    "jquery": "^3.5.1"
   }
 }
