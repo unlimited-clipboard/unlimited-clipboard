@@ -45,7 +45,7 @@ function start() {
     });
 
     mainWindow.on('close', (event) => {
-        mainWindow.reload();
+        //mainWindow.reload();
         if (!app.isQuiting) {
             event.preventDefault();
             mainWindow.hide();

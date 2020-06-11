@@ -28,6 +28,7 @@ document.body.addEventListener('keydown', function(e) {
     } else if (e.key === 'Enter') {
         changeToSelected(e)
     } else {
+        input.focus();
         refreshView();
     }
 });
@@ -47,7 +48,7 @@ async function changeToSelected(e) {
         }
 
         await db.history.delete(parseInt(e.target.id));
-        refreshView()
+        refreshView();
     }
 
     //db.history.keys((r) => {console.log(r)});
