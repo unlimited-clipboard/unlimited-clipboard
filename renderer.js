@@ -1,5 +1,4 @@
-const {clipboard} = require('electron')
-
+const {clipboard, remote} = require('electron');
 const jquery = require('jquery');
 const dexie = require('dexie')
 dexie.debug = true;
@@ -7,6 +6,10 @@ const db = new dexie("history");
 
 const input = document.querySelector('input');
 const table = document.querySelector('table');
+
+remote.getCurrentWindow().on('show', function(){
+    input.focus();
+});
 
 document.body.addEventListener('keydown', function(e) {
     let focusable = Array.from(document.querySelectorAll("tr td:first-child"));
@@ -16,17 +19,17 @@ document.body.addEventListener('keydown', function(e) {
     //focusable.push(input);
 
     if (e.key === 'ArrowDown') {
-
         let nextElement = focusable[index + 1] || focusable[0];
-        //console.log(nextElement);
         nextElement.focus();
-
     } else if (e.key === 'ArrowUp') {
         let nextElement = focusable[index - 1] || focusable[focusable.length - 1];
-        //console.log(nextElement);
         nextElement.focus();
     } else if (e.key === 'Enter') {
         changeToSelected(e)
+    } else if (e.key === 'Escape') {
+        input.value = '';
+        refreshView();
+        remote.getCurrentWindow().close();
     } else {
         input.focus();
         refreshView();

@@ -1,2 +1,3 @@
-body {width: 100%; overflow-y: hidden;}
-td {max-width: 350px; height: 1.2em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+html {border-style: solid; border-color: slategray; border-width: 5px; width: 100%; height: 100%;}
+body {width: 100%; overflow-y: hidden; overflow-x: hidden; background-color: #F0F0F0;}
+td:first-child {width: 350px; max-width: 335px; height: 1.2em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}

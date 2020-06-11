@@ -9,12 +9,13 @@ if (!app.requestSingleInstanceLock()) {
 function start() {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
-        width: 450,
+        width: 400,
         height: 600,
-        //resizable: false,
+        frame: false,
+        resizable: false,
         //movable: false,
-        //minimizable: false,
-        //maximizable: false,
+        minimizable: false,
+        maximizable: false,
         //closable: true,
         show: false,
         title: 'clips',
