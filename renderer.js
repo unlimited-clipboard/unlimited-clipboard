@@ -61,7 +61,10 @@ async function changeToSelected(e) {
 }
 
 function refreshView() {
-    db.history.count((r) => document.querySelector('title').innerText = `history (${r})`);
+    db.history.count((r) => {
+        document.querySelector('title').innerText = `history (${r})`;
+        input.placeholder = `search in ${r} clips`;
+    });
     return db.history.limit(10).desc()
         .filter((history) => {
             return !input.value || history.text.indexOf(input.value) !== -1;
