@@ -67,7 +67,7 @@ function refreshView() {
     });
     return db.history.limit(10).desc()
         .filter((history) => {
-            return !input.value || history.text.indexOf(input.value) !== -1;
+            return !input.value || history.text.toLowerCase().indexOf(input.value.toLowerCase()) !== -1;
         })
         .toArray()
         .then((history) => {
