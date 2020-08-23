@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="node_modules/jquery/dist/jquery.js">
+    <link rel="stylesheet" href="main.css">
+    <title>history</title>
+  </head>
+  <body>
+  <form>
+    <input class="input-group" placeholder="press keys for shortcut" class="form-control" autofocus/>
+    <button type="reset" class="btn-info input-group">reset</button><button type="submit" class="btn-dark input-group">save</button>
+  </form>
+  <script src="./globalShortcut.js"></script>
+  </body>
+</html>

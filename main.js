@@ -1,12 +1,13 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, ipcMain, Tray, Menu, clipboard, dialog, globalShortcut} = require('electron')
 const path = require('path')
+const settings = require('electron-settings')
 
 if (!app.requestSingleInstanceLock()) {
     app.quit()
 }
 
-function start() {
+async function start() {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
         width: 400,
@@ -33,6 +34,42 @@ function start() {
 
     // Open the DevTools.
     //mainWindow.webContents.openDevTools()
+
+    const globalShortcutWindow = new BrowserWindow({
+        width: 400/* + 1000*/,
+        height: 100/* + 500*/,
+        frame: false,
+        resizable: false,
+        //movable: false,
+        minimizable: false,
+        maximizable: false,
+        //closable: true,
+        show: false,
+        title: 'globalShortcut',
+        //icon: path.join(__dirname, 'icons/16x16.png'),
+        webPreferences: {
+            //preload: path.join(__dirname, 'preload.js'),
+            nodeIntegration: true
+        }
+    })
+
+    globalShortcutWindow.setMenuBarVisibility(false)
+
+    // and load the index.html of the app.
+    globalShortcutWindow.loadFile('globalShortcut.html')
+
+    // Open the DevTools.
+    //globalShortcutWindow.webContents.openDevTools()
+
+    globalShortcutWindow.on('close', (event) => {
+        //mainWindow.reload();
+        if (!app.isQuiting) {
+            event.preventDefault();
+            globalShortcutWindow.hide();
+        }
+
+        return false;
+    });
 
     const icon = {
         linux: 'icons/64x64.png',
@@ -63,6 +100,10 @@ function start() {
             label: 'Show history',
             click: () => mainWindow.show()
         },
+        {
+            label: 'Change global Shortcut',
+            click: () => globalShortcutWindow.show()
+        },
         /*{
             label: 'Switch keyboard',
             click: switchKeyboard
@@ -79,7 +120,13 @@ function start() {
     let contextMenu = Menu.buildFromTemplate(template)
     tray.setContextMenu(contextMenu)
 
-    globalShortcut.register('CmdOrCtrl+Alt+Up', () => {
+    let globalShortcutSettings = await settings.get('globalShortcut')
+    if (!globalShortcutSettings) {
+        await settings.set('globalShortcut', 'CmdOrCtrl+Alt+Up')
+        globalShortcutSettings = 'CmdOrCtrl+Alt+Up'
+    }
+
+    globalShortcut.register(globalShortcutSettings, () => {
         tray.focus()
         mainWindow.show();
     })
@@ -117,7 +164,6 @@ app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) start()
 })
 
-/*ipcMain.on('asynchronous-message', (event, arg) => {
-    console.log(arg) // prints "ping"
-    setTimeout(() => event.reply('asynchronous-message', clipboard.readText()), 1000)
-})*/
+ipcMain.on('app-exit', () => {
+    app.exit()
+})
