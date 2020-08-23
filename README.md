@@ -14,5 +14,6 @@ simple clipboard manager with unlimited history on electron
 * npm run start
 * npm run build && ./dist/unlimited-clipboard-1.0.0.AppImage
 
+### Usage:
 * Ctrl+Alt+Up - show window (you can change it in menu)
 * Escape - close window
