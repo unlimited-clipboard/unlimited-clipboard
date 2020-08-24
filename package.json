@@ -1,7 +1,7 @@
 {
   "name": "unlimited-clipboard",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "version": "1.0.1",
+  "description": "simple clipboard manager with unlimited history on electron",
   "main": "main.js",
   "scripts": {
     "start": "electron .",

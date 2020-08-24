@@ -73,7 +73,7 @@ async function start() {
 
     const icon = {
         linux: 'icons/64x64.png',
-        win32: 'icons/icons.ico',
+        win32: 'icons/64x64.png',
         darwin: 'icons/16x16.png'
     }
 
